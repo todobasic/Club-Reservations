@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/eventListFragment">
+
+    <fragment
+        android:id="@+id/eventListFragment"
+        android:name="com.example.clubreservations.ui.event_list.EventListFragment"
+        android:label="EventListFragment"
+        tools:layout="@layout/fragment_event_list">
+        <action
+            android:id="@+id/action_eventListFragment_to_newEventFragment"
+            app:destination="@id/newEventFragment" />
+        <action
+            android:id="@+id/action_eventListFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newEventFragment"
+        android:name="com.example.clubreservations.ui.event_new.NewEventFragment"
+        android:label="NewEventFragment"
+        tools:layout="@layout/fragment_new_event">
+        <action
+            android:id="@+id/action_newEventFragment_to_eventListFragment"
+            app:destination="@id/eventListFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/eventDetailsFragment"
+        android:name="com.example.clubreservations.ui.event_details.EventDetailsFragment"
+        android:label="EventDetailsFragment"
+        tools:layout="@layout/fragment_event_details">
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_eventListFragment"
+            app:destination="@id/eventListFragment" />
+        <argument
+            android:name="eventId"
+            app:argType="long"/>
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_newTableFragment"
+            app:destination="@id/newTableFragment" />
+        <action
+            android:id="@+id/action_eventDetailsFragment_to_tableDetailsFragment"
+            app:destination="@id/tableDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newTableFragment"
+        android:name="com.example.clubreservations.ui.table_new.NewTableFragment"
+        android:label="NewTableFragment"
+        tools:layout="@layout/fragment_new_table">
+        <action
+            android:id="@+id/action_newTableFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/tableDetailsFragment"
+        android:name="com.example.clubreservations.ui.table_details.TableDetailsFragment"
+        android:label="TableDetailsFragment"
+        tools:layout="@layout/fragment_table_details">
+        <action
+            android:id="@+id/action_tableDetailsFragment_to_eventDetailsFragment"
+            app:destination="@id/eventDetailsFragment" />
+        <argument
+            android:name="tableId"
+            app:argType="long"/>
+    </fragment>
+</navigation>
