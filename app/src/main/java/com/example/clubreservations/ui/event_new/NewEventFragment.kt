@@ -8,10 +8,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.example.clubreservations.databinding.FragmentNewEventBinding
+import com.example.clubreservations.model.Reservation
 import com.example.clubreservations.presentation.event.EventNewViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class NewEventFragment: Fragment() {
+class NewEventFragment : Fragment() {
 
     private lateinit var binding: FragmentNewEventBinding
     private val viewModel: EventNewViewModel by viewModel()
@@ -28,8 +29,11 @@ class NewEventFragment: Fragment() {
 
     private fun saveEvent() {
         val title = binding.etEventTitleInput.text.toString()
+        val reservations: List<Reservation>? = listOf()
 
-        viewModel.save(title)
+        if (reservations != null) {
+            viewModel.save(title)
+        }
 
         Toast.makeText(context, "Saving event", Toast.LENGTH_SHORT).show()
         val action = NewEventFragmentDirections.actionNewEventFragmentToEventListFragment()
@@ -39,7 +43,7 @@ class NewEventFragment: Fragment() {
     companion object {
         val Tag = "NewEvent"
 
-        fun create(): Fragment{
+        fun create(): Fragment {
             return NewEventFragment()
         }
     }

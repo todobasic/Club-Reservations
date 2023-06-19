@@ -1,14 +1,17 @@
 package com.example.clubreservations.presentation.table
 
 import androidx.lifecycle.ViewModel
-import com.example.clubreservations.data.repository.TableRepository
-import com.example.clubreservations.model.Table
-import java.util.Date
+import com.example.clubreservations.data.repository.EventRepository
+import com.example.clubreservations.model.Reservation
 
 class TableNewViewModel(
-    val tableRepository: TableRepository
+    val eventRepository: EventRepository
 ) : ViewModel() {
-    fun save(ordNumber: String, title: String, content: String, dateAdded: Date) {
-        tableRepository.save(Table(0, ordNumber, title, content, dateAdded))
+    fun updateReservations(eventId: Long, reservations: List<Reservation>) {
+        eventRepository.updateReservations(eventId, reservations)
+    }
+
+    fun getEventReservations(eventId: Long): List<Reservation> {
+        return eventRepository.getEventReservations(eventId)
     }
 }

@@ -1,6 +1,5 @@
 package com.example.clubreservations.ui.event_list
 
-import android.media.MediaDrm.OnEventListener
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -28,8 +27,8 @@ class EventAdapter : RecyclerView.Adapter<EventViewHolder>() {
         val event = events[position]
         holder.bind(event)
         onEventSelectedListener?.let { listener ->
-            holder.itemView.setOnClickListener { listener.onEventSelected(event.id)}
-            holder.itemView.setOnLongClickListener { listener.onEventLongPress(event)}
+            holder.itemView.setOnClickListener { listener.onEventSelected(event.id) }
+            holder.itemView.setOnLongClickListener { listener.onEventLongPress(event) }
         }
     }
 

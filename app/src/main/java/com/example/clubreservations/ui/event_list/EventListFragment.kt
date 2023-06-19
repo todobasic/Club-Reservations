@@ -56,13 +56,13 @@ class EventListFragment : Fragment(), OnEventEventListener {
     }
 
     override fun onEventSelected(id: Long?) {
-       val action =
-           EventListFragmentDirections.actionEventListFragmentToEventDetailsFragment(id ?: -1)
+        val action =
+            EventListFragmentDirections.actionEventListFragmentToEventDetailsFragment(id ?: -1)
         findNavController().navigate(action)
     }
 
     override fun onEventLongPress(event: Event): Boolean {
-        event?.let { it ->
+        event.let { it ->
             viewModel.delete(it)
         }
         return true

@@ -1,8 +1,10 @@
 package com.example.clubreservations.data.room
 
 import android.content.Context
-import android.media.metrics.Event
-import androidx.room.*
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.example.clubreservations.data.EventDao
 
 
@@ -12,6 +14,7 @@ import com.example.clubreservations.data.EventDao
     exportSchema = false
 )
 
+@TypeConverters(RoomTypeConverters::class)
 abstract class EventDatabase : RoomDatabase() {
 
     abstract fun getEventDao(): EventDao

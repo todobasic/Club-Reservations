@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import com.example.clubreservations.model.Event
+import com.example.clubreservations.model.Reservation
 
 @Dao
 interface EventDao {
@@ -21,4 +22,8 @@ interface EventDao {
 
     @Query("SELECT * FROM events")
     fun getAllEvents(): LiveData<List<Event>>
+
+    @Query("UPDATE events SET reservations = :reservations WHERE id =:eventId")
+    fun updateReservations(eventId: Long, reservations: List<Reservation>)
+
 }

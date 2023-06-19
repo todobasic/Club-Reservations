@@ -5,26 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.clubreservations.data.repository.EventRepository
 import com.example.clubreservations.databinding.FragmentEventDetailsBinding
 import com.example.clubreservations.model.Event
-import com.example.clubreservations.model.Table
+import com.example.clubreservations.model.Reservation
 import com.example.clubreservations.presentation.event.EventDetailsViewModel
-import com.example.clubreservations.presentation.table.TableListViewModel
 import com.example.clubreservations.ui.table_list.OnTableEventListener
 import com.example.clubreservations.ui.table_list.TableAdapter
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class EventDetailsFragment :  Fragment(), OnTableEventListener {
+class EventDetailsFragment : Fragment(), OnTableEventListener {
 
     private lateinit var binding: FragmentEventDetailsBinding
     private lateinit var adapter: TableAdapter
-    private val viewModel: TableListViewModel by viewModel()
     private val viewModel2: EventDetailsViewModel by viewModel()
     private val args: EventDetailsFragmentArgs by navArgs()
+    private lateinit var event: Event
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,12 +35,8 @@ class EventDetailsFragment :  Fragment(), OnTableEventListener {
     ): View? {
         binding = FragmentEventDetailsBinding.inflate(layoutInflater)
         binding.btnReserve.setOnClickListener { showNewTableFragment() }
+        event = viewModel2.getEventById(args.eventId)!!
         setupRecyclerView()
-        viewModel.tables.observe(viewLifecycleOwner) {
-            if (it != null && it.isNotEmpty()) {
-                adapter.setTables(it)
-            }
-        }
         return binding.root
     }
 
@@ -49,13 +47,15 @@ class EventDetailsFragment :  Fragment(), OnTableEventListener {
             false
         )
         adapter = TableAdapter()
+        event.reservations?.let { adapter.setTables(it) }
         adapter.onTableSelectedListener = this
         binding.tableListRvTables.adapter = adapter
     }
 
     private fun showNewTableFragment() {
-        val action =
-            EventDetailsFragmentDirections.actionEventDetailsFragmentToNewTableFragment()
+        val action = EventDetailsFragmentDirections.actionEventDetailsFragmentToNewTableFragment(
+            args.eventId
+        )
         findNavController().navigate(action)
     }
 
@@ -86,15 +86,17 @@ class EventDetailsFragment :  Fragment(), OnTableEventListener {
         }
     }
 
-    override fun onTableSelected(id: Long?) {
+    override fun onTableSelected(reservation: Reservation) {
         val action =
-            EventDetailsFragmentDirections.actionEventDetailsFragmentToTableDetailsFragment(id ?: -1)
+            EventDetailsFragmentDirections.actionEventDetailsFragmentToTableDetailsFragment(
+                reservation
+            )
         findNavController().navigate(action)
     }
 
-    override fun onTableLongPress(table: Table?): Boolean {
-        table?.let { it ->
-            viewModel.delete(it)
+    override fun onTableLongPress(reservation: Reservation?): Boolean {
+        reservation?.let {
+
         }
         return true
     }

@@ -34,17 +34,23 @@
         android:label="EventDetailsFragment"
         tools:layout="@layout/fragment_event_details">
         <action
-            android:id="@+id/action_eventDetailsFragment_to_eventListFragment"
-            app:destination="@id/eventListFragment" />
-        <argument
-            android:name="eventId"
-            app:argType="long"/>
-        <action
             android:id="@+id/action_eventDetailsFragment_to_newTableFragment"
-            app:destination="@id/newTableFragment" />
+            app:destination="@id/newTableFragment">
+            <argument
+                android:name="eventId"
+                app:argType="long" />
+        </action>
+
         <action
             android:id="@+id/action_eventDetailsFragment_to_tableDetailsFragment"
-            app:destination="@id/tableDetailsFragment" />
+            app:destination="@id/tableDetailsFragment">
+            <argument
+                android:name="reservation"
+                app:argType="com.example.clubreservations.model.Reservation" />
+        </action>
+        <argument
+            android:name="eventId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/newTableFragment"
@@ -54,6 +60,9 @@
         <action
             android:id="@+id/action_newTableFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
+        <argument
+            android:name="eventId"
+            app:argType="long" />
     </fragment>
     <fragment
         android:id="@+id/tableDetailsFragment"
@@ -64,7 +73,7 @@
             android:id="@+id/action_tableDetailsFragment_to_eventDetailsFragment"
             app:destination="@id/eventDetailsFragment" />
         <argument
-            android:name="tableId"
-            app:argType="long"/>
+            android:name="reservation"
+            app:argType="com.example.clubreservations.model.Reservation" />
     </fragment>
 </navigation>

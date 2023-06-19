@@ -30,20 +30,21 @@
         android:id="@+id/btn_Reserve"
         android:layout_width="238dp"
         android:layout_height="50dp"
-        android:layout_marginStart="84dp"
-        android:layout_marginTop="224dp"
+        android:layout_marginBottom="20dp"
         android:text="Make a reservation"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapImage" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/table_list_rv_tables"
         android:layout_width="match_parent"
-        android:layout_height="179dp"
+        android:layout_height="0dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_Reserve"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_reservedtables" />
 
     <TextView
         android:id="@+id/tv_reservedtables"
