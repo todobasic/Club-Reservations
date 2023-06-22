@@ -28,6 +28,11 @@ class NewEventFragment : Fragment() {
     }
 
     private fun saveEvent() {
+
+        if(binding.etEventTitleInput.text!!.isEmpty()){
+            Toast.makeText(context, "Incorrect input", Toast.LENGTH_SHORT).show()
+        } else {
+
         val title = binding.etEventTitleInput.text.toString()
         val reservations: List<Reservation>? = listOf()
 
@@ -38,7 +43,7 @@ class NewEventFragment : Fragment() {
         Toast.makeText(context, "Saving event", Toast.LENGTH_SHORT).show()
         val action = NewEventFragmentDirections.actionNewEventFragmentToEventListFragment()
         findNavController().navigate(action)
-    }
+    }}
 
     companion object {
         val Tag = "NewEvent"

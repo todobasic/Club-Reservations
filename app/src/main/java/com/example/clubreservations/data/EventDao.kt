@@ -26,4 +26,7 @@ interface EventDao {
     @Query("UPDATE events SET reservations = :reservations WHERE id =:eventId")
     fun updateReservations(eventId: Long, reservations: List<Reservation>)
 
+    @Query("UPDATE events SET taken_tables = :reservedTables WHERE id =:eventId")
+    fun updateReservedTables(eventId: Long, reservedTables: List<String>)
+
 }

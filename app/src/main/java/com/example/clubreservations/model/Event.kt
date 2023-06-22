@@ -11,5 +11,7 @@ data class Event(
     @ColumnInfo(name = "title")
     val title: String,
     @ColumnInfo(name = "reservations")
-    val reservations: List<Reservation>? = listOf<Reservation>()
+    val reservations: List<Reservation>? = listOf<Reservation>(),
+    @ColumnInfo(name = "taken_tables")
+    val takenTables: List<String>? = listOf<String>()
 )

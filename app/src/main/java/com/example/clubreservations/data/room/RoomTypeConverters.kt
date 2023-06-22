@@ -30,13 +30,13 @@ class RoomTypeConverters {
     }
 
     @TypeConverter
-    fun toIntList(data: String): List<Int> {
-        val listType = object : TypeToken<List<Int>>() {}.type
+    fun toStringList(data: String): List<String> {
+        val listType = object : TypeToken<List<String>>() {}.type
         return GsonBuilder().create().fromJson(data, listType)
     }
 
     @TypeConverter
-    fun toIntString(intList: List<Int>): String {
-        return GsonBuilder().create().toJson(intList)
+    fun toStringString(stringList: List<String>): String {
+        return GsonBuilder().create().toJson(stringList)
     }
 }

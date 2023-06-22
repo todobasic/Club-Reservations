@@ -13,9 +13,14 @@ class EventRepositoryImpl(val eventDao: EventDao) : EventRepository {
     override fun updateReservations(eventId: Long, reservations: List<Reservation>) {
         eventDao.updateReservations(eventId, reservations)
     }
-
     override fun getEventReservations(eventId: Long): List<Reservation> {
         return eventDao.getEventById(eventId)?.reservations ?: listOf()
+    }
+    override fun updateReservedTables(eventId: Long, reservedTables: List<String>) {
+        eventDao.updateReservedTables(eventId, reservedTables)
+    }
+    override fun getEventReservedTables(eventId: Long): List<String> {
+        return eventDao.getEventById(eventId)?.takenTables ?: listOf()
     }
 
 }

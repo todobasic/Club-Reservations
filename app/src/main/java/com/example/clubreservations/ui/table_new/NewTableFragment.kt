@@ -21,6 +21,7 @@ import com.example.clubreservations.model.Reservation
 import com.example.clubreservations.presentation.table.TableNewViewModel
 import com.example.clubreservations.utils.getDate
 import kotlinx.android.synthetic.main.fragment_new_table.selfieImage
+import kotlinx.android.synthetic.main.fragment_new_table.spinner
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.io.ByteArrayOutputStream
 
@@ -29,8 +30,11 @@ class NewTableFragment : Fragment() {
     private lateinit var binding: FragmentNewTableBinding
     private val viewModel: TableNewViewModel by viewModel()
     private val args: NewTableFragmentArgs by navArgs()
+    var isImageUploaded = false
 
     val REQUEST_CODE = 2000
+    lateinit var reservedTables : List<String>
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,26 +44,25 @@ class NewTableFragment : Fragment() {
         binding = FragmentNewTableBinding.inflate(layoutInflater)
         binding.btnAddTable.setOnClickListener { saveReservation() }
 
-        val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
-            requireContext(),
-            R.array.numbers,
-            android.R.layout.simple_spinner_item
-        )
+        val eventId = args.eventId
+        reservedTables = viewModel.getEventReservedTables(eventId).toMutableList()
 
-        binding.btnImageCapture.setOnClickListener { captureImage() }
 
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinner.adapter = adapter
-        binding.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        val spinnerItems: Array<String> = resources.getStringArray(R.array.numbers)
 
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        val filteredItems: MutableList<String> = ArrayList()
 
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+        for (item in spinnerItems) {
+            if(!(reservedTables as MutableList<String>).contains(item)) {
+                filteredItems.add(item)
             }
         }
+
+        val adapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, filteredItems)
+
+        binding.spinner.adapter = adapter
+
+        binding.btnImageCapture.setOnClickListener { captureImage() }
 
         return binding.root
     }
@@ -67,6 +70,7 @@ class NewTableFragment : Fragment() {
     private fun captureImage() {
         val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(cameraIntent, REQUEST_CODE)
+        isImageUploaded = true
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -79,6 +83,10 @@ class NewTableFragment : Fragment() {
     }
 
     private fun saveReservation() {
+
+        if(binding.etTableUsernameInput.text.isEmpty() || binding.etTableDrinkInput.text.isEmpty() || isImageUploaded == false){
+            Toast.makeText(context, "Incorrect input", Toast.LENGTH_SHORT).show()
+        } else {
 
         val eventId = args.eventId
 
@@ -104,14 +112,18 @@ class NewTableFragment : Fragment() {
             )
         )
 
+        val reservedTables = viewModel.getEventReservedTables(eventId).toMutableList()
+        reservedTables.add(binding.spinner.selectedItem.toString())
+
         viewModel.updateReservations(eventId, reservations)
+        viewModel.updateReservedTables(eventId, reservedTables)
 
         Toast.makeText(context, "Reserving...", Toast.LENGTH_SHORT).show()
 
         val action =
             NewTableFragmentDirections.actionNewTableFragmentToEventDetailsFragment(eventId)
         findNavController().navigate(action)
-    }
+    }}
 
     companion object {
         val Tag = "NewTable"

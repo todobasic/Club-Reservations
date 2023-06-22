@@ -12,5 +12,7 @@ interface EventRepository {
     fun getAllEvents(): LiveData<List<Event>>
     fun updateReservations(eventId: Long, reservations: List<Reservation>)
     fun getEventReservations(eventId: Long): List<Reservation>
+    fun updateReservedTables(eventId: Long, reservedTables: List<String>)
+    fun getEventReservedTables(eventId: Long): List<String>
 
 }

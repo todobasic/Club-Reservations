@@ -1,22 +1,21 @@
 package com.example.clubreservations.ui.event_details
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.MutableLiveData
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.clubreservations.data.repository.EventRepository
 import com.example.clubreservations.databinding.FragmentEventDetailsBinding
 import com.example.clubreservations.model.Event
 import com.example.clubreservations.model.Reservation
 import com.example.clubreservations.presentation.event.EventDetailsViewModel
 import com.example.clubreservations.ui.table_list.OnTableEventListener
 import com.example.clubreservations.ui.table_list.TableAdapter
-import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -27,6 +26,9 @@ class EventDetailsFragment : Fragment(), OnTableEventListener {
     private val viewModel2: EventDetailsViewModel by viewModel()
     private val args: EventDetailsFragmentArgs by navArgs()
     private lateinit var event: Event
+    private var reservations: MutableLiveData<MutableList<Reservation>> = MutableLiveData(
+        mutableListOf())
+    private var reservedTables: MutableLiveData<MutableList<String>> = MutableLiveData(mutableListOf())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,6 +38,8 @@ class EventDetailsFragment : Fragment(), OnTableEventListener {
         binding = FragmentEventDetailsBinding.inflate(layoutInflater)
         binding.btnReserve.setOnClickListener { showNewTableFragment() }
         event = viewModel2.getEventById(args.eventId)!!
+        reservations.value = event.reservations!!.toMutableList()
+        reservedTables.value = event.takenTables!!.toMutableList()
         setupRecyclerView()
         return binding.root
     }
@@ -47,7 +51,7 @@ class EventDetailsFragment : Fragment(), OnTableEventListener {
             false
         )
         adapter = TableAdapter()
-        event.reservations?.let { adapter.setTables(it) }
+        adapter.setTables(reservations.value!!)
         adapter.onTableSelectedListener = this
         binding.tableListRvTables.adapter = adapter
     }
@@ -94,10 +98,19 @@ class EventDetailsFragment : Fragment(), OnTableEventListener {
         findNavController().navigate(action)
     }
 
-    override fun onTableLongPress(reservation: Reservation?): Boolean {
-        reservation?.let {
+    override fun onTableLongPress(reservation: Reservation): Boolean {
+        reservations.value?.remove(reservation)
+        reservations.value = reservations.value
+        viewModel2.updateReservations(reservations.value!!)
 
-        }
+        adapter.setTables(reservations.value!!)
+        adapter.onTableSelectedListener = this
+        binding.tableListRvTables.adapter = adapter
+
+        reservedTables.value?.remove(reservation.ordNumber.toString())
+        reservedTables.value = reservedTables.value
+        viewModel2.updateReservedTables(reservedTables.value!!)
+
         return true
     }
 
